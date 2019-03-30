@@ -4,23 +4,29 @@
     <meta charset="utf-8">
     <title>Canvas Assignment</title>
     <style type="text/css">
+    /* Border for Canvas Element */
       canvas{
         border: 1px solid black;
       }
     </style>
   </head>
   <body>
+    <!-- HTML for Canvas Element, and fallback content for non-supported browsers -->
     <canvas id="canvas" width="500" height="500">
       Your browser does not support the HTML5 canvas tag.
     </canvas>
     <form>
+    <!-- Form with color picker defaulted to red - stack overflow resource linked by Colleen in Piazza -->
     <!-- https://stackoverflow.com/questions/39264722/onchange-event-is-not-working-in-color-type-input -->
-    Choose Color: <input type="color" name="picker" value="#FF0000" onChange = "colorchange()">
+    Choose Color: <input type="color" name="picker" value="#FF0000" >
     </form>
+    <!-- Script section -added after HTML content so HTML/DOM Content runs first -->
     <script>
+    // Retrieving the color picker input element
       var selector = document.querySelector("input[name='picker']");
       console.log(selector);
 
+    // Selecting the HTML Canvas element, adjusting to 80% of screen size, and setting a 2D context
       var c = document.getElementById("canvas");
       // https://stackoverflow.com/questions/1664785/resize-html5-canvas-to-fit-window
       c.width = window.innerWidth * .8;
@@ -28,10 +34,11 @@
       var ctx = c.getContext("2d");
       var x = 0;
       var y = 0;
-      // var color = 'red';
+      //Using the red default color value in the picker as the default canvas color
       var color = selector.value;
       var radius = 20;
 
+      // Defining the draw function to draw arcs on the canvas
       function draw() {
       ctx.beginPath();
       ctx.arc(x, y, radius, 0, 2 * Math.PI);
@@ -39,10 +46,12 @@
       ctx.fill();
     };
 
-      function colorchange () {
+      // Using an eventhandler on the color picker to update the color when the user selects a new one
+      selector.addEventListener('change',function colorchange () {
         color = selector.value;
-      }
+      })
 
+      // Adding an envent listener for mouse movement, to turn the mouse position into drawn arcs on the canvas
       window.addEventListener('mousemove', function (e) {
       console.log(e.pageX);
       console.log(e.pageY);
@@ -51,6 +60,8 @@
       draw();
     })
 
+    // Adding an envent listener for touch movement, to turn touch position into drawn arcs on the canvas
+    //Resources I used for adapting for touch are linked in comments below
     // https://www.w3schools.com/graphics/game_controllers.asp
     window.addEventListener('touchmove', function (e) {
     //https://developer.mozilla.org/en-US/docs/Web/API/Touch/pageY
@@ -61,11 +72,9 @@
     draw();
   })
 
-    // window.addEventListener('resize', function(e) {
-    //   c.width = window.innerWidth * .8;
-    //   c.height = window.innerHeight * .8;
-    // })
-
+    //Listening for orientation change to clear & redraw Canvas
+    //Orientation change was happening before resize - I used the two stack overflow posts below to resolve this issue
+    //A resize event listener is placed inside the orientationchange listener function, then removed after it runs once
     // https://stackoverflow.com/questions/11444838/getting-wrong-screen-height-when-trigger-orientationchange-event
     // https://stackoverflow.com/questions/12452349/mobile-viewport-height-after-orientation-change
     window.addEventListener('orientationchange', function (e) {
@@ -78,6 +87,7 @@
         window.addEventListener('resize',relisten);
     });
 
+    // A listener for key presses and a switch statement to route them to the correct outcome
     window.addEventListener('keyup', function (e) {
     console.log(e.keyCode);
     switch (e.keyCode) {
@@ -102,20 +112,13 @@
         }
         break;
       case 32:
+      // Spacebar clears the canvas - used the link below to figure this out
       // https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/clearRect
         ctx.clearRect(0, 0, c.width, c.height);
         break;
     }
-    // if (e.keyCode === 66) {
-    //   color = 'blue';
-    // }
-    // else if (e.keyCode == 89) {
-    //   color = 'yellow';
-    // }
-    // draw();
   })
 
-    // draw();
     </script>
   </body>
 </html>
