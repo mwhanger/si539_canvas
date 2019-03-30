@@ -13,12 +13,23 @@
     <canvas id="canvas" width="500" height="500">
       Your browser does not support the HTML5 canvas tag.
     </canvas>
+    <form>
+    <!-- https://stackoverflow.com/questions/39264722/onchange-event-is-not-working-in-color-type-input -->
+    Choose Color: <input type="color" name="picker" value="#FF0000" onChange = "colorchange()">
+    </form>
     <script>
+      var selector = document.querySelector("input[name='picker']");
+      console.log(selector);
+
       var c = document.getElementById("canvas");
+      // https://stackoverflow.com/questions/1664785/resize-html5-canvas-to-fit-window
+      c.width = window.innerWidth * .8;
+      c.height = window.innerHeight * .8;
       var ctx = c.getContext("2d");
       var x = 0;
       var y = 0;
-      var color = 'red';
+      // var color = 'red';
+      var color = selector.value;
       var radius = 20;
 
       function draw() {
@@ -27,6 +38,10 @@
       ctx.fillStyle = color;
       ctx.fill();
     };
+
+      function colorchange () {
+        color = selector.value;
+      }
 
       window.addEventListener('mousemove', function (e) {
       console.log(e.pageX);
@@ -38,12 +53,19 @@
 
     // https://www.w3schools.com/graphics/game_controllers.asp
     window.addEventListener('touchmove', function (e) {
+    //https://developer.mozilla.org/en-US/docs/Web/API/Touch/pageY
     console.log(e.touches[0].pageX);
     console.log(e.touches[0].pageY);
     x= e.touches[0].pageX;
     y = e.touches[0].pageY;
     draw();
   })
+
+    window.addEventListener('orientationchange', function (e) {
+      c.width = window.innerWidth * .8;
+      c.height = window.innerHeight * .8;
+      ctx.clearRect(0, 0, c.width, c.height);
+    })
 
     window.addEventListener('keyup', function (e) {
     console.log(e.keyCode);
@@ -70,7 +92,7 @@
         break;
       case 32:
       // https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/clearRect
-        ctx.clearRect(0, 0, c.width, c.height)
+        ctx.clearRect(0, 0, c.width, c.height);
         break;
     }
     // if (e.keyCode === 66) {
