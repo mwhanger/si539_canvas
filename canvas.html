@@ -61,11 +61,22 @@
     draw();
   })
 
+    // window.addEventListener('resize', function(e) {
+    //   c.width = window.innerWidth * .8;
+    //   c.height = window.innerHeight * .8;
+    // })
+
+    // https://stackoverflow.com/questions/11444838/getting-wrong-screen-height-when-trigger-orientationchange-event
+    // https://stackoverflow.com/questions/12452349/mobile-viewport-height-after-orientation-change
     window.addEventListener('orientationchange', function (e) {
-      c.width = window.innerWidth * .8;
-      c.height = window.innerHeight * .8;
-      ctx.clearRect(0, 0, c.width, c.height);
-    })
+      var relisten =  function(f) {
+        c.width = window.innerWidth * .8;
+        c.height = window.innerHeight * .8;
+        console.log('cleared');
+        ctx.clearRect(0, 0, c.width, c.height);
+        window.removeEventListener('resize',relisten);}
+        window.addEventListener('resize',relisten);
+    });
 
     window.addEventListener('keyup', function (e) {
     console.log(e.keyCode);
