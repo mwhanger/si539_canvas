@@ -36,6 +36,14 @@
       draw();
     })
 
+    window.addEventListener('touchmove', function (e) {
+    console.log(e.pageX);
+    console.log(e.pageY);
+    x=e.pageX;
+    y = e.pageY;
+    draw();
+  })
+
     window.addEventListener('keyup', function (e) {
     console.log(e.keyCode);
     switch (e.keyCode) {
@@ -70,10 +78,10 @@
     // else if (e.keyCode == 89) {
     //   color = 'yellow';
     // }
-    draw();
+    // draw();
   })
 
-    draw();
+    // draw();
     </script>
   </body>
 </html>
